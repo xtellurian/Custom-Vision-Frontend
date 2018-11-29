@@ -42,9 +42,6 @@ export class PredictImage extends Component {
   static renderPrediction(p) {
     return (
       <div>
-        <h3>Predicted: </h3> <p> {p.predictions[0].tagName} </p>
-
-
         <table className='table'>
           <thead>
             <tr>
@@ -55,7 +52,7 @@ export class PredictImage extends Component {
           <tbody>
             {p.predictions.map(prediction =>
               <tr key={prediction.probability}>
-                <td> {prediction.tagName} </td> 
+                <td> {prediction.tagName} </td>
                 <td>{prediction.probability.toFixed(2)}</td>
               </tr>
             )}
@@ -80,8 +77,17 @@ export class PredictImage extends Component {
           </label>
           <input type="submit" value="Submit" />
         </form>
-
-        {contents}
+        <div className="container">
+          <div className="row">
+            <div className="col-xs-6">
+              ONE
+              {contents}
+            </div>
+            <div className="col-xs-6">
+              <img src={this.state.url}/>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
