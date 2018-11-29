@@ -9,13 +9,17 @@ export class PredictImage extends Component {
 
     fetch('api/prediction/url', {
       method: 'POST',
-      //mode: 'no-cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         url: 'https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png',
       })
     }).then(response => response.json())
       .then(data => {
         console.log(data);
+        console.log("data type: " + typeof(data));
         this.setState({ prediction: data, loading: false });
       });
   }
@@ -35,7 +39,7 @@ export class PredictImage extends Component {
 
     return (
       <div>
-        <h1>Weather forecast</h1>
+        <h1>Image Prediction</h1>
         <p>This component demonstrates fetching data from the server.</p>
         {contents}
       </div>
