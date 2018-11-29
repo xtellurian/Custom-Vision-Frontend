@@ -5,8 +5,14 @@ export class PredictImage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { prediction: "", loading: true };
+    this.state = { prediction: "", loading: true, url: "https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png" };
 
+    this.handleUrlChange = this.handleUrlChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
+  }
+
+  makePrediction() {
     fetch('api/prediction/url', {
       method: 'POST',
       headers: {
@@ -14,20 +20,47 @@ export class PredictImage extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        url: 'https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png',
+        url: this.state.url,
       })
     }).then(response => response.json())
       .then(data => {
         console.log(data);
-        console.log("data type: " + typeof(data));
+        console.log("data type: " + typeof (data));
         this.setState({ prediction: data, loading: false });
       });
   }
 
-  static renderPrediction(prediction) {
+  handleUrlChange(event) {
+    this.setState({ url: event.target.value });
+  }
+
+  handleSubmit(event) {
+    this.makePrediction();
+    event.preventDefault();
+  }
+
+  static renderPrediction(p) {
     return (
       <div>
-        <h3>Predicted: </h3> <p> {prediction.predictions[0].tagName} </p>
+        <h3>Predicted: </h3> <p> {p.predictions[0].tagName} </p>
+
+
+        <table className='table'>
+          <thead>
+            <tr>
+              <th>Tag Name</th>
+              <th>Probability</th>
+            </tr>
+          </thead>
+          <tbody>
+            {p.predictions.map(prediction =>
+              <tr key={prediction.probability}>
+                <td> {prediction.tagName} </td> 
+                <td>{prediction.probability.toFixed(2)}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -40,7 +73,14 @@ export class PredictImage extends Component {
     return (
       <div>
         <h1>Image Prediction</h1>
-        <p>This component demonstrates fetching data from the server.</p>
+        <form onSubmit={this.handleSubmit}>
+          <label>
+            Image URL:
+              <input type="text" name="name" value={this.state.url} onChange={this.handleUrlChange} />
+          </label>
+          <input type="submit" value="Submit" />
+        </form>
+
         {contents}
       </div>
     );

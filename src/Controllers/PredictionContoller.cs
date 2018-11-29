@@ -35,6 +35,7 @@ namespace src.Controllers
             var body = await response.Content.ReadAsStringAsync();
             Console.WriteLine(body);
             var data = JsonConvert.DeserializeObject<PredictionResponse>(body);
+            data.Reorder();
             return Ok(data);
         }
     }
