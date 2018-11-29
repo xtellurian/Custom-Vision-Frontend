@@ -5,6 +5,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using src.Model;
 
@@ -13,27 +15,37 @@ namespace src.Controllers
     [Route("api/[controller]")]
     public class PredictionController : Controller
     {
-        private string temp = "https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png";
-        public PredictionController(IHttpClientFactory clientFactory)
+        public PredictionController(ILogger<PredictionController> logger, IHttpClientFactory clientFactory, IConfiguration configuration)
         {
             client = clientFactory.CreateClient();
-            Console.WriteLine("Hello world");
+            predictionEndpoint = configuration.GetValue<string>("PredictionEndpoint");
+            if(string.IsNullOrEmpty(predictionEndpoint))
+            {
+                throw new NullReferenceException("PredictionEndpoint cannot be null");
+            } else {
+                logger.LogInformation($"Prediction Endpoint: {predictionEndpoint}");
+            }
+
+            this.logger = logger;
         }
 
-        private string prediction_endpoint = "http://localhost";
         private readonly HttpClient client;
+        private readonly string predictionEndpoint;
+        private readonly ILogger<PredictionController> logger;
 
         [HttpPost("url")]
         public async Task<IActionResult> GetPrediction([FromBody] PredictionRequestByUrl request)
         {
-            Console.WriteLine($"Got a request, url: {request.url}");
+            logger.LogInformation($"Got a request, url: {request.url}");
             if(string.IsNullOrEmpty(request.url)) {
+                logger.LogError("URL cannot be empty");
                 throw new NullReferenceException("URL cannot be empty");
             }
-            var response = await client.PostAsJsonAsync(prediction_endpoint + "/url", request);
-            Console.WriteLine($"response code {response.StatusCode}");
+            logger.LogInformation($"Model request path: {predictionEndpoint}/url");
+            var response = await client.PostAsJsonAsync(predictionEndpoint + "/url", request);
+            logger.LogInformation($"response code {response.StatusCode}");
             var body = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(body);
+            logger.LogDebug(body);
             var data = JsonConvert.DeserializeObject<PredictionResponse>(body);
             data.Reorder();
             return Ok(data);

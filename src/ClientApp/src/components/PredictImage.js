@@ -80,7 +80,6 @@ export class PredictImage extends Component {
         <div className="container">
           <div className="row">
             <div className="col-xs-6">
-              ONE
               {contents}
             </div>
             <div className="col-xs-6">
