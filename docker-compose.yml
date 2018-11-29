@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    image: flanagan89/custom-vision-frontend:1
+    ports:
+      - "80:80"
+    expose:
+    - "80"
+    environment:
+    - PredictionEndpoint=http://model
+    - Logging:LogLevel:Default=Information
+
+  #nginx to forward request 
+  model:
+    image: flanagan89/fruit-and-veg-predictor:1
