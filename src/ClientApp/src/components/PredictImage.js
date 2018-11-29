@@ -5,11 +5,11 @@ export class PredictImage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { prediction: "", loading: true, url: "https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png" };
+    this.state = { prediction: "", loading: true, url: "" };
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
+// https://www.ecigs.net.au/wp-content/uploads/2015/09/red-apple.png
   }
 
   makePrediction() {
@@ -31,7 +31,7 @@ export class PredictImage extends Component {
   }
 
   handleUrlChange(event) {
-    this.setState({ url: event.target.value });
+    this.setState({ url: event.target.value, loading: true });
   }
 
   handleSubmit(event) {
@@ -69,11 +69,11 @@ export class PredictImage extends Component {
 
     return (
       <div>
-        <h1>Image Prediction</h1>
+        <h2>Image Prediction</h2>
+        <br/>
         <form onSubmit={this.handleSubmit}>
           <label>
-            Image URL:
-              <input type="text" name="name" value={this.state.url} onChange={this.handleUrlChange} />
+              <input type="text" placeholder="Paste an image URL" name="name" value={this.state.url} onChange={this.handleUrlChange} />
           </label>
           <input type="submit" value="Submit" />
         </form>

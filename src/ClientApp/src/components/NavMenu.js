@@ -24,19 +24,19 @@ export class NavMenu extends Component {
     return (
       <div>
         <Navbar color="faded" light>
-          <NavbarBrand href="/" className="mr-auto">src</NavbarBrand>
+          <NavbarBrand href="/" className="mr-auto">Custom Vision Frontend</NavbarBrand>
           <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
           <Collapse isOpen={!this.state.collapsed} navbar>
             <Nav navbar>
               <NavItem>
                 <NavLink href="/">Home</NavLink>
               </NavItem>
-              <NavItem>
+              {/* <NavItem>
                 <NavLink href="/counter">Counter</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink href="/fetch-data">Fetch data</NavLink>
-              </NavItem>
+              </NavItem> */}
               <NavItem>
                 <NavLink href="/predict-image">Predict Image</NavLink>
               </NavItem>
