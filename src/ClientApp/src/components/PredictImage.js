@@ -5,7 +5,7 @@ export class PredictImage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { prediction: "", loading: true, url: "" };
+    this.state = { prediction: {}, predicting: false, url: "" , status: ""};
 
     this.handleUrlChange = this.handleUrlChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -13,6 +13,7 @@ export class PredictImage extends Component {
   }
 
   makePrediction() {
+    this.setState({predicting: true});
     fetch('api/prediction/url', {
       method: 'POST',
       headers: {
@@ -26,7 +27,9 @@ export class PredictImage extends Component {
       .then(data => {
         console.log(data);
         console.log("data type: " + typeof (data));
-        this.setState({ prediction: data, loading: false });
+        this.setState({ prediction: data, predicting: false });
+      }).catch(err => {
+        this.setState({predicting: false, status: "error", predicting: false});
       });
   }
 
@@ -63,7 +66,7 @@ export class PredictImage extends Component {
   }
 
   render() {
-    let contents = this.state.loading
+    let contents = this.state.prediction.predictions == null
       ? <p><em>Loading...</em></p>
       : PredictImage.renderPrediction(this.state.prediction);
 
@@ -75,7 +78,8 @@ export class PredictImage extends Component {
           <label>
               <input type="text" placeholder="Paste an image URL" name="name" value={this.state.url} onChange={this.handleUrlChange} />
           </label>
-          <input type="submit" value="Submit" />
+          <br/>
+          <input type="submit" value="Predict" />
         </form>
         <div className="container">
           <div className="row">

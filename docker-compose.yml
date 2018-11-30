@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: flanagan89/custom-vision-frontend:1
+    image: flanagan89/custom-vision-frontend:2
     ports:
       - "80:80"
     expose:
